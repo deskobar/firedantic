@@ -57,7 +57,7 @@ class AsyncBareModel(pydantic.BaseModel, ABC):
     __collection__: Optional[str] = None
     __document_id__: str
 
-    async def save(self) -> None:
+    async def save(self, **kwargs) -> None:
         """
         Saves this model in the database.
 
@@ -68,7 +68,7 @@ class AsyncBareModel(pydantic.BaseModel, ABC):
             del data[self.__document_id__]
 
         doc_ref = self._get_doc_ref()
-        await doc_ref.set(data)
+        await doc_ref.set(data, **kwargs)
         setattr(self, self.__document_id__, doc_ref.id)
 
     async def delete(self) -> None:
